@@ -4,6 +4,9 @@ import whisper
 from flask import Flask, request, jsonify
 from youtube_transcript_api import YouTubeTranscriptApi, TranscriptsDisabled, NoTranscriptFound
 from openai import OpenAI
+from dotenv import load_dotenv
+
+load_dotenv()
 
 app = Flask(__name__)
 client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
@@ -32,8 +35,8 @@ def summarize_with_openai(text: str):
     response = client.chat.completions.create(
         model="gpt-4",
         messages=[
-            {"role": "system", "content": "Ти асистент, який допомагає з навчанням."},
-            {"role": "user", "content": f"Ось транскрипт відео:\n\n{text}\n\nЗроби коротке summary з action points."}
+            {"role": "system", "content": "You are a helpful assistant that summarizes educational video transcripts."},
+            {"role": "user", "content": f"Here is a video transcript:\n\n{text}\n\nSummarize it briefly and list clear action points for learning."}
         ],
         temperature=0.7
     )
